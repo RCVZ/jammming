@@ -8,7 +8,6 @@ class PlayList extends Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
-    // this.handleClick = this.handleClick.bind(this);
 
   }
 
@@ -19,7 +18,7 @@ class PlayList extends Component {
   render() {
     return(
       <div className="Playlist">
-        <input onChange={this.handleChange} defaultValue={'New Playlist'} />
+        <input onChange={this.handleChange} value={this.props.defaultValue}/>
         <TrackList trackList={this.props.trackList}
                    deleteTrack={this.props.deleteTrack}
                    inPlayList={true}/>

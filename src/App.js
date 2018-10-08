@@ -24,11 +24,18 @@ class App extends Component {
     this.savePlayList = this.savePlayList.bind(this);
   }
 
+  searchSpotify(searchTerm) {
+    Spotify.search(searchTerm).then((tracks) => {
+      this.setState({searchResults: tracks});
+    });
+  }
+
   addToPlayList (track) {
     let tracks = this.state.playList;
     if (tracks.includes(track)){
       return this.setState({playList: tracks});
-    } else {
+    }
+    else {
       tracks.push(track);
       this.setState({playList: tracks});
     }
@@ -41,25 +48,22 @@ class App extends Component {
     this.setState({playList: tracks});
   }
 
-  searchSpotify(searchTerm) {
-    Spotify.search(searchTerm).then((tracks) => {
-      this.setState({searchResults: tracks});
-    });
-  }
-
   setPlayListName(playListName) {
     this.setState({playListName: playListName});
   }
 
   savePlayList() {
-    const playListUris = this.state.playList.map(track => track.uri);
-    Spotify.sendPlayList(this.state.playListName, playListUris).then(()=> {
-      this.setState({
-        playList: [],
-        playListName: 'New playlist'
+    if (this.state.playList.length > 0 && this.state.playListName.length > 0 ) {
+      const playListUris = this.state.playList.map(track => track.uri);
+      Spotify.sendPlayList(this.state.playListName, playListUris).then(()=> {
+        this.setState({
+          playList: [],
+          playListName: 'New playlist'
+        });
       });
-    });
+    }
   }
+
 
   render() {
     return (
@@ -73,7 +77,8 @@ class App extends Component {
             <PlayList trackList={this.state.playList}
                       deleteTrack={this.deleteTrack}
                       setPlayListName={this.setPlayListName}
-                      savePlayList={this.savePlayList}/>
+                      savePlayList={this.savePlayList}
+                      defaultValue={this.state.playListName}/>
           </div>
         </div>
       </div>

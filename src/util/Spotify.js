@@ -17,7 +17,7 @@ const Spotify = {
       window.history.pushState('Access Token', null, '/');
       return userAccesToken;
     } else {
-      const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=http://localhost:3000/&scope=playlist-modify-public&response_type=token`;
+      const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=http://localhost:3000/&scope=playlist-modify-public%20playlist-modify-private&response_type=token`;
       window.location = authorizeUrl;
     }
   },
@@ -32,7 +32,6 @@ const Spotify = {
       });
       if(response.ok){
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
         return jsonResponse.tracks.items.map(track => ({
           id: track.id,
           name: track.artists[0].name,
@@ -79,6 +78,9 @@ const Spotify = {
                 method: 'POST',
                 body: JSON.stringify({uris:playListUris})
               });
+              if(response.ok){
+                return
+              }
 
             } catch(error) {
               console.log(error);
